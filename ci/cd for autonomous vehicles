@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CI/CD Pipeline - Autonomous Vehicles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pipeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+
+        .stage {
+            background: #1e293b;
+            padding: 20px;
+            width: 15%;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #334155;
+            transition: 0.3s;
+        }
+
+        .stage.active {
+            background: #22c55e;
+            color: #000;
+            border-color: #16a34a;
+        }
+
+        .stage.failed {
+            background: #ef4444;
+            border-color: #b91c1c;
+        }
+
+        button {
+            display: block;
+            margin: auto;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background: #38bdf8;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+        }
+
+        .log {
+            background: #020617;
+            margin-top: 30px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🚗 Autonomous Vehicle CI/CD Pipeline</h1>
+
+<div class="pipeline">
+    <div class="stage" id="stage0">Code Commit</div>
+    <div class="stage" id="stage1">Build</div>
+    <div class="stage" id="stage2">Simulation Test</div>
+    <div class="stage" id="stage3">Sensor Validation</div>
+    <div class="stage" id="stage4">Safety Check</div>
+    <div class="stage" id="stage5">Deploy</div>
+</div>
+
+<button onclick="runPipeline()">Run CI/CD Pipeline</button>
+
+<div class="log" id="log"></div>
+
+<script>
+    let stages = [
+        "Code committed to repository",
+        "Building autonomous driving modules",
+        "Running simulation tests (LiDAR, Camera, Radar)",
+        "Validating sensor fusion",
+        "Performing safety & compliance checks",
+        "Deploying to autonomous vehicle system"
+    ];
+
+    let currentStage = 0;
+
+    function runPipeline() {
+        resetPipeline();
+        currentStage = 0;
+        runNextStage();
+    }
+
+    function runNextStage() {
+        if (currentStage >= stages.length) {
+            logMessage("✅ CI/CD Pipeline completed successfully!");
+            return;
+        }
+
+        let stageDiv = document.getElementById("stage" + currentStage);
+        stageDiv.classList.add("active");
+        logMessage("▶ " + stages[currentStage]);
+
+        setTimeout(() => {
+            // Simulate failure chance
+            if (Math.random() < 0.1) {
+                stageDiv.classList.remove("active");
+                stageDiv.classList.add("failed");
+                logMessage("❌ Pipeline failed at: " + stages[currentStage]);
+                return;
+            }
+
+            stageDiv.classList.remove("active");
+            stageDiv.classList.add("active");
+            currentStage++;
+            runNextStage();
+        }, 1500);
+    }
+
+    function resetPipeline() {
+        document.getElementById("log").innerHTML = "";
+        for (let i = 0; i < stages.length; i++) {
+            let stage = document.getElementById("stage" + i);
+            stage.classList.remove("active", "failed");
+        }
+    }
+
+    function logMessage(message) {
+        let log = document.getElementById("log");
+        log.innerHTML += message + "<br>";
+        log.scrollTop = log.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
